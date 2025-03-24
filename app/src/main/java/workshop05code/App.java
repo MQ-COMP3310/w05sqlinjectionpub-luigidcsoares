@@ -34,6 +34,12 @@ public class App {
         }
     }
     // End code for logging exercise
+
+    private static Boolean isValidGuess(String guess) {
+	int validSize = 4;
+	String validRegex = String.format("[a-z]{%d}", validSize);
+	return guess.matches(validRegex);
+    }
     
     /**
      * @param args the command line arguments
@@ -80,6 +86,15 @@ public class App {
 
             while (!guess.equals("q")) {
                 System.out.println("You've guessed '" + guess+"'.");
+		if (!isValidGuess(guess)) {
+		    String invalidMsg = "This is not a valid guess!"
+			+ " A guess must consist of four lowercase letters a-z."
+			+ " Please, try again: ";
+		    
+		    System.out.print(invalidMsg);
+		    guess = scanner.nextLine();
+		    continue;
+		}
 
                 if (wordleDatabaseConnection.isValidWord(guess)) { 
                     System.out.println("Success! It is in the the list.\n");
