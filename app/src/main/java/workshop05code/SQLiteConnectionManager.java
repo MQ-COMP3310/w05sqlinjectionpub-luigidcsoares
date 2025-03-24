@@ -18,6 +18,8 @@ import java.util.logging.Logger;
 
 public class SQLiteConnectionManager {
     //Start code logging exercise
+    private static final Logger logger = Logger.getLogger(SQLiteConnectionManager.class.getName());
+    
     static {
 	ClassLoader classLoader = App.class.getClassLoader();
 	String logPropertiesPath = classLoader.getResource("logging.properties").getPath();
@@ -28,11 +30,10 @@ public class SQLiteConnectionManager {
 	    FileInputStream logProperties = new FileInputStream(logPropertiesPath);
             LogManager.getLogManager().readConfiguration(logProperties);
         } catch (SecurityException | IOException e1) {
-            e1.printStackTrace();
+            // e1.printStackTrace();
+	    logger.log(Level.WARNING, e1.getMessage(), e1);
         }
     }
-
-    private static final Logger logger = Logger.getLogger(SQLiteConnectionManager.class.getName());
     //End code logging exercise
     
     private String databaseURL = "";
@@ -68,12 +69,12 @@ public class SQLiteConnectionManager {
         try (Connection conn = DriverManager.getConnection(databaseURL)) {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
-                System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created.");
+                logger.info("The driver name is " + meta.getDriverName());
+                logger.info("A new database has been created.");
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+	    logger.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
@@ -92,7 +93,7 @@ public class SQLiteConnectionManager {
                     return true;
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+		logger.log(Level.WARNING, e.getMessage(), e);
                 return false;
             }
         }
@@ -117,7 +118,7 @@ public class SQLiteConnectionManager {
                 return true;
 
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+		logger.log(Level.WARNING, e.getMessage(), e);
                 return false;
             }
         }
@@ -141,7 +142,7 @@ public class SQLiteConnectionManager {
 	    pstmt.setString(2, word);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+	    logger.log(Level.WARNING, e.getMessage(), e);
         }
 
     }
@@ -169,7 +170,7 @@ public class SQLiteConnectionManager {
             return false;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+	    logger.log(Level.WARNING, e.getMessage(), e);
             return false;
         }
 

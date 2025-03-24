@@ -35,7 +35,7 @@ public class App {
     }
     // End code for logging exercise
 
-    private static Boolean isValidGuess(String guess) {
+    private static Boolean isValidWord(String guess) {
 	int validSize = 4;
 	String validRegex = String.format("[a-z]{%d}", validSize);
 	return guess.matches(validRegex);
@@ -67,7 +67,12 @@ public class App {
             String line;
             int i = 1;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+		if (!isValidWord(line)) {
+		    logger.severe("Attempt to add invalid word: " + line);
+		    continue;
+		}
+		
+                logger.info("Added valid word: " + line);
                 wordleDatabaseConnection.addValidWord(i, line);
                 i++;
             }
@@ -86,7 +91,7 @@ public class App {
 
             while (!guess.equals("q")) {
                 System.out.println("You've guessed '" + guess+"'.");
-		if (!isValidGuess(guess)) {
+		if (!isValidWord(guess)) {
 		    String invalidMsg = "This is not a valid guess!"
 			+ " A guess must consist of four lowercase letters a-z."
 			+ " Please, try again: ";
