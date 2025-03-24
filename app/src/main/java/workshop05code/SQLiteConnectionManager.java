@@ -19,10 +19,14 @@ import java.util.logging.Logger;
 public class SQLiteConnectionManager {
     //Start code logging exercise
     static {
+	ClassLoader classLoader = App.class.getClassLoader();
+	String logPropertiesPath = classLoader.getResource("logging.properties").getPath();
+
         // must set before the Logger
         // loads logging.properties from the classpath
         try {// resources\logging.properties
-            LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
+	    FileInputStream logProperties = new FileInputStream(logPropertiesPath);
+            LogManager.getLogManager().readConfiguration(logProperties);
         } catch (SecurityException | IOException e1) {
             e1.printStackTrace();
         }

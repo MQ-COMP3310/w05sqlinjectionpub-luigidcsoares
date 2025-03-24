@@ -17,17 +17,22 @@ import java.util.logging.Logger;
  */
 public class App {
     // Start code for logging exercise
+    private static final ClassLoader classLoader = App.class.getClassLoader();
+    private static final String dataPath = classLoader.getResource("data.txt").getPath();
+    private static final Logger logger = Logger.getLogger(App.class.getName());
+    
     static {
+	String logPropertiesPath = classLoader.getResource("logging.properties").getPath();
+
         // must set before the Logger
         // loads logging.properties from the classpath
         try {// resources\logging.properties
-            LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
+	    FileInputStream logProperties = new FileInputStream(logPropertiesPath);
+            LogManager.getLogManager().readConfiguration(logProperties);
         } catch (SecurityException | IOException e1) {
             e1.printStackTrace();
         }
     }
-
-    private static final Logger logger = Logger.getLogger(App.class.getName());
     // End code for logging exercise
     
     /**
@@ -52,7 +57,7 @@ public class App {
 
         // let's add some words to valid 4 letter words from the data.txt file
 
-        try (BufferedReader br = new BufferedReader(new FileReader("resources/data.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(dataPath))) {
             String line;
             int i = 1;
             while ((line = br.readLine()) != null) {
